@@ -1,5 +1,17 @@
 const employeesEl = document.getElementById('employees') 
 
+// console.log(JSON.parse(localStorage.getItem('employees')))
+
+let employees = []
+
+if (localStorage.getItem('employees')) {
+    employees = JSON.parse(localStorage.getItem('employees'))
+    
+    for (const employee of employees) {
+        addEmployee(employee.name, employee.jobTitle)
+    }
+}
+
 function addEmployee(name, jobTitle) {
     const employeeEl = document.createElement('div')
     employeeEl.classList.add('employee-card')
@@ -22,6 +34,13 @@ formEl.addEventListener('submit', (event) => {
 
     addEmployee(nameInput.value, jobTitleInput.value)
 
+    employees.push({
+        name: nameInput.value,
+        jobTitle: jobTitleInput.value
+    })
+
+    localStorage.setItem('employees', JSON.stringify(employees))
+
     nameInput.value = ''
     jobTitleInput.value = ''
 })
@@ -29,4 +48,7 @@ formEl.addEventListener('submit', (event) => {
 const clearBtn = document.getElementById('clear')
 clearBtn.addEventListener('click', (event) => {
     employeesEl.innerHTML = ''
+    localStorage.removeItem('employees')
+    employees = []
+    // OR employees.length = 0
 })
